@@ -15,24 +15,30 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
   setBasePackage("spring")
 
   @Bean(destroyMethod = "shutdown") def graphDatabaseService: GraphDatabaseService = {
-    new GraphDatabaseFactory().newEmbeddedDatabase(Runner.dbName)
+    new GraphDatabaseFactory().newEmbeddedDatabase(Runner.dbNameReal)
   }
 
-  @Autowired var personRepository: PersonRepositoryScala = _
+//  @Autowired var personRepository: PersonRepositoryScala = _
+  @Autowired var personRepository: AuthorRepository = _
 
   val names: List[String] = List("Greg", "Roy", "Craig")
 
   override def run(args: String*): Unit = {
-    val greg = new Person("Greg")
-    val roy = new Person("Roy")
-    val craig = new Person("Craig")
+      runPerson()
+  }
 
-    val persons: List[Person] = List(greg, roy, craig)
-    persons foreach println
+  def runPerson() =  {
+    val greg = new Author("Greg")
+    val roy = new Author("Roy")
+    val craig = new Author("Craig")
+
+    val persons: List[Author] = List(greg, roy, craig)
+   // persons foreach println
     save(persons)
     lookup
     lookupteammates
   }
+
 
   def lookup = {
     println("Lookup each person by name...")
@@ -46,33 +52,33 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
   def lookupteammates = {
     println("Looking up who works with Greg...")
     trans {
-      for (person:Person <- personRepository.findByTeammatesName("Greg").asScala) {
-        println(person.name + " works with Greg.")
+      for (person <- personRepository.findByReferences("Greg").asScala) {
+        println(person.in + " works with Greg.")
       }
     }
   }
 
-  def save(list: List[Person]) = {
+  def save(list: List[Author]) = {
     val greg = list.head
     val roy = list.tail.head
     val craig = list.tail.tail.head
 
     println
-    println(greg)
-    println(roy)
-    println(craig)
+   // println(greg)
+   // println(roy)
+   // println(craig)
 
     trans {
       for (l <- list) personRepository.save(l)
 
       val greg1 = personRepository.findByName(greg.name)
-      greg1.workWith(roy)
-      greg1.workWith(craig)
+      greg1.workWith(roy, "greg-out", "roy-in")
+      greg1.workWith(craig, "greg-out", "craig-in")
 
       personRepository.save(greg1)
 
       val roy1 = personRepository.findByName(roy.name)
-      roy1.workWith(craig)
+      roy1.workWith(craig, "roy-out", "craig-in")
 
       personRepository.save(roy1)
     }
@@ -97,6 +103,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
 
 object Runner extends App {
   val dbName = "target/accessingdataneo4j1.db"
+  val dbNameReal = "target/real.db"
 
   FileUtils.deleteRecursively(new java.io.File(dbName))
   SpringApplication.run(classOf[ApplicationScala])
