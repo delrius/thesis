@@ -1,0 +1,65 @@
+615–640.
+Dommel H.-P. Floor control for multimedia conferencing and
+collaboration / H.-P. Dommel, J. J. Garcia-Luna-Aceves // Mul-
+timedia Systems.– Springer-Verlag, 1997. –Vol. 5. – P. 23–38. 4. Dommel H.-P. Networking Foundations for Collaborative Com- puting at Internet Scope / H-P. Dommel, J. J. Garcia-Luna- Aceves // International ICSC Congress on Intelligent Systems
+2. Johnson C.W. Understanding the interaction between public policy, managerial decision-making and the engineering of cri- tical infrastructures // Reliab. Eng-ng & Sys. Safety. – 92(9). – 2007. – P. 1141–1154.
+3. Kröger W. Critical infrastructures at risk: a need for a new con- ceptual approach and extended analytical tools / W. Kröger // Reliab. Eng-ng & Sys. Safety. – 93(12). – 2008. – P. 1781–1787.
+4. Keeney R. L. Modeling values for anti-terrorism analysis / R. L. Keeney // Risk Analysis. – 27(3). – 2007. – P. 585 – 596.
+5. Ushakov I. Counter-terrorism: protection resources allocation, part 2 / I. Ushakov // Reliability : Theory and Applications. – 2006. – No. 2. – P. 71–78.
+
+Schnabel J. Shape description methods for medical images / J. Schnabel; Technical report TR/95/12, London, 1995.
+2. Zhang D. Review of shape representation and description tech- niques. / D. Zhang, G. Lu; Pattern Recognition vol. 37, p. 1–19, 2004.
+3. Loncavic S. A survey of shape analysis techniques. / S. Lon- cavic; Patter Recognition, vol. 31(8), p. 983–1001, 1998.
+Sonka M. Image processing, analysis and machine vision / M. Sonka, V. Hlavac, R. B.; Chapman and Hall, 1993, ISBN-13: 9780412455704. http://css.engineering.uiowa.edu/%7Edip/ LECTURE/lecture.html
+5. Aguado A. S. Feature extraction and image processing / A. S. Aguado, M. S. Nixon; Newnes, Oxford, First edition 2002, ISBN: 0-7506-5078-8.
+6. Caldwell C. B. Characterisation of mammographic parenchy- mal pattern by fractal dimension. / C. B. Caldwell, S. J. Staple- ton, D. W. Hodsworth, et al. // Physics in Medicine and Biology, vol. 35(2), p. 235–247, 1990.
+7. Mihara N. The usefulness of fractal geometry for the diagnosis of small peripheral lung tumors. / N. Mihara, K. Kuriyama, S. Kido, et al.// Nippon Igaku Hoshasen Gakkai Zasshi, vol. 58(4), p. 148–151, 1998.
+8. Kotarski W. Shape analysis of blood cells based on fractal di- mension. / W. Kotarski, S. Widuch // Journal of Medical Infor- matics and Technologies, vol. 2, p. MI177-182, 2001.
+9. Webber R. L. Predicting osseous changes in ankle fractures. / R. L. Webber, T. E. Underhill, R. A. Horton, et al. // IEEE, En- gineering in Medicine and Biology Magazine, vol. 12(1), p. 103–110, 1993.
+10. Feltrin G P. Bone fractal analysis. / G P. Feltrin, R. Stramare, D. Miotto, et al. // Current Osteoporosis Reports, vol. 2, p. 53– 58, 2004.
+11. Bullmore E. Fractal analysis of the boundary between white matter and cerebral cortex in magnetic resonance images: A controlled study of schizophrenic and manic-depressive pa- tients. / E. Bullmore, M. Brammer, I. Harvey, et al. // Psycho- logical Medicine, vol. 24 (3), p. 771–781, 1994.
+12. Cook M. J. Fractal description of cerebral cortical patterns in frontal lobe epilepsy. / M. J.Cook, S. L. Free, M. R. A. Manford, et al. // European Neurology, vol. 35 (6), p. 327–335, 1995.
+13. Schnabel J. Fractal feature analysis and classification of MS le- sions. / J. Schnabel, L. Wang, D. Rueckert, S. Arridge // Com- puter Assisted Radiology, Berlin, p. 21–24, 1995.
+14. Free S. L. Three-dimensional fractal analysis of the white mat- ter surface from magnetic resonance images of the human brain. / S. L. Free, S. M. Sisodiya, M. J. Cook, et al. // Oxford Univer- sity Press, Cerebral Cortex, vol. 6 (6), p. 830–836, 1996.
+15. Thompson P. M. Three-dimensional statistical analysis of sulcal variability in the human brain. / P. M. Thompson, C. Schwartz, R. T. Lin, et al. // The Journal of Neuroscience, vol. 16 (3), p. 4261–4274, 1996.
+16. Rybaczuk M. Fractal analysis of adults cerebellum surface NMR observations. / M. Rybaczuk, A. Kedzia // Folia Morpho- logica (Warszawa), vol. 55(4), p. 431–433, 1996.
+17. Blanton R. E. Mapping cortical asymmetry and complexity pat- terns in normal children. / R. E. Blanton, J. G. Levitt, P. M. Thompson, et al. // Psychiatry Research, vol. 107(1), p. 29–43, 2001.
+18. Iftekharuddin K. M. Fractal analysis of tumor in brain MR im- ages. / K. M Iftekharuddin, Jia W, Marsh R. // Machine Vision and Applications, vol.13( 5-6), p. 352–362, 2003.
+19. Liu Jing Z. Fractal Dimension in Human Cerebellum Measured by Magnetic Resonance Imaging. / Jing Z. Liu, Lu D. Zhang, Guang H. Yue // Biophysical Journal vol. 85, p. 4041–4046, 2003.
+20. Lee Jong-Min. Analysis of the hemispheric asymmetry using fractal dimension of a Skeletonized Cerebral Surface. / Jong- Min Lee, Uicheul Yoon, Jae-Jin Kim, et al. // IEEE Transac- tions on Biomedical Engineering, vol. 51 (8), p. 1494–1998, 2004.
+21. Mandelbrot B. B. The fractal geometry of nature. / B. B. Man- delbrot; Freeman, New York, 1982, ISBN 0-7167-1186-9.
+22. Falconer K. J. Fractal geometry: mathematical foundations and
+applications. / K. J. Falconer; New York, John Wiley&Sons,
+1990. ISBN-10: 0471922870
+23. Feder J. Fractals. / J. Feder; Plenum Press, New York, 1988.
+ISBN 0-306-42851-2
+24. Crownover R. M. Introduction to fractals and chaos. /
+R. M. Crownover; Jones and Bartlett Publishers Inc., 1995,
+ISBN 0867204648
+25. Peitgen H. Chaos and fractals: new frontiers of science. /
+H. Peitgen, Jurgens H., Saupe D.; Springer-Verlag, New York,
+1992, ISBN: 3540979034
+26. Schroeder M. Fractals, chaos, power laws: minutes from an in-
+finite paradise. /M. Schroeder; Freeman, New York, 1991.
+ISBN-10: 0716723573
+27. Gouyet J.F. Physics and fractal structures. /J. F. Gouyet; Spring-
+er-Verlag, Masson, 1996. ISBN 0-387-94153-1
+28. Kindratenko V. Development and application of image analysis techniques for identification and classification of microscopic particles. / V. Kindratenko; Universiteit Antwerpen, Ph.D. Thesis,
+Antwerpen, 1997.
+25. Glaser R. Education and thinking: The role of knowledge / R. Glaser // Amer. Psychologist. 1984. – V. 39(2). – P. 93–104.
+26. Gui1fогd I. P. The structure of intellect / I. P. Gui1fогd // Psychol. Bull – 1956. – V. 53. – P. 267–293.
+27. Sternberg, R. J. Introduction / R. J. Sternberg // Models of intelligence : International perspectives / R. J. Sternberg, J. Lautrey & T. I. Lubart (Eds.). – Washington, DC : American Psychological Association, 2003.
+
+1. Schulte Ch. Finite Domain Constraint Programming Systems / Christian Schulte, Mats Carlsson // In Handbook of Constraint Programming / Francesca Rossi, Peter van Beek, Toby Walsh, editors. – Elsevier, 2006. – 32 pp.
+2. Letichevsky A. A Model for Interaction of Agents and Environ- ments / Alexander Letichevsky, David Gilbert // Lecture Notes in Computer Science No 1827. Recent Trends in Algebraic De- velopment Techniques, 2000. – Р. 119–131.
+3. Henz M. An Overview of Finite Domain Constraint Program- ming / Martin Henz, Tobias Müller // Proceedings of the Fifth Conference of the Association of Asia-Pacific Operational Re- search Societies. Singapore, 2000. – 9 pp.
+4. Schulte C. Constraint Programming with Mozart – An Appetizer / Christian Schulte // Proceedings of Second International Mozart/Oz Conference (MOZ 2004). – Charleroi, Belgium, 2004. – 12 pp.
+5. van Roy Peter. Concepts, Techniques, and Models of Computer Programming / Peter van Roy, Seif Haridi // The MIT Press, Cambridge, MA, 2004. – 904 pp.
+
+6. Schulte C. Finite Domain Constraint Programming in Oz. A Tu- torial / Christian Schulte, Gert Smolka // Tutorial, distributed with Mozart Programming System, 2008.
+7. Mozart Consortium. The Mozart Programming System v. 1.4.0. – System available from official website: http://www. mozart-oz.org/; Programming Systems Lab, Saarbrücken, Swedish Institute of Computer Science, Stockholm, and Uni- versité catholique de Louvain, Louvain, 2008.
+8. Haridi S. Tutorial of Oz / Seif Haridi, Nils Franzиn // Tutorial, distributed with Mozart Programming System, 2008.
+9. Visual Prolog v. 7.0. – System available from official website: http://www.visual-prolog.com, 2007.
+10. Sun Microsystems. Java 2 Standard Edition v. 1.5.0_10. – Sys- tem available from official website: http://www.java.sun.com/, 2006.
+11. Sun Microsystems. NetBeans Integrated Development Environ- ment v. 5.5. – System available from official website: http:// www.netbeans.org, 2006.
+21. Хокинс Д. Об интеллекте / Д. Хокинс, С. Блеиксли. – М. : Вильямс, 2007. – 240 с.
