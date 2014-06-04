@@ -33,10 +33,10 @@ public class PdfBoxReader {
 
             try (PrintWriter out = new PrintWriter(new FileOutputStream("del-out.txt"))) {
 
- //                 int n = doc.getNumberOfPages();
-                int n = 5;
+                  int n = doc.getNumberOfPages();
+ //               int n = 5;
 
-                for (int i = n; i <= n; i++) {
+                for (int i = 1; i <= n; i++) {
 
                     final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
 
@@ -100,11 +100,13 @@ public class PdfBoxReader {
     }
 
     public static void printBlock(TextBlock block) {
-     //   System.out.println(block.toString());
+      //  System.out.println(block.toString());
      //   System.out.println(block.print());
-        System.out.println(block.printWhite());
-        System.out.println("-------------columns----------------------");
-        System.out.println(block.printColumns());
+     //   System.out.println(block.printWhite());
+     //   System.out.println("-------------columns----------------------");
+    //    System.out.println(block.printColumns());
+     //     block.printBlocks();
+        block.printReferences();
     }
 
 
