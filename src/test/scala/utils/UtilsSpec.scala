@@ -12,7 +12,7 @@ class UtilsSpec extends UnitSpec {
     200 --------------
         100        300
    */
-  "A bound rectangle" should "be inside" in {
+  "The bound rectangle" should "be inside" in {
     val o1 = Point(100, 400)
     val o2 = Point(300, 200)
 

@@ -6,9 +6,10 @@ import pdf.parser.TextBlock.{Document, Line}
 import java.util.{List => JList}
 import collection.JavaConversions._
 import org.apache.pdfbox.util.TextPosition
+import scalax.file.Path
+import scala.language.postfixOps
 
-
-class TextBlock(val list: Document, val oheight: Double) {
+class TextBlock(val list: Document, val oheight: Double, val article: String) {
 
   implicit def con(v: TextPosition): Position = Position(v)
 
@@ -71,17 +72,24 @@ class TextBlock(val list: Document, val oheight: Double) {
 
   def printReferences = references foreach blockPrinter
 
-  def printBlocks = {
-    val bl = getBlocks
-    println(Structure(bl).findMostUsedFontSize(bl) + "<--------------------------------------")
-    bl foreach blockPrinter
-  }
+//  def printBlocks = {
+//    val bl = getBlocks
+//    println(Structure(bl).findMostUsedFontSize(bl) + "<--------------------------------------")
+//    bl foreach blockPrinter
+//  }
 
   def blockPrinter(block: TextBlock.Block): Unit = {
-    println("!!!!!!!!!!!!!!!!!!start!!!!!!!!!!!!!!!!")
-    block.map(l => l.map(_.getText).toList.mkString(" ")).foreach(println)
-    println("!!!!!!!!!!!!!!!!!!end!!!!!!!!!!!!!!!!!!")
-    println
+    val out = Path("tmp", article.replaceAll("pdf", "txt"))
+
+    def appendln(s: String) = {
+      out.append(s)
+      out.append("\n")
+    }
+
+    appendln("!!!!!!!!!!!!!!!!!!start!!!!!!!!!!!!!!!!")
+    block.map(l => l.map(_.getText).toList.mkString(" ")).foreach(appendln)
+    appendln("!!!!!!!!!!!!!!!!!!end!!!!!!!!!!!!!!!!!!")
+    appendln("")
   }
 
   def getLines(r: Rectangle): TextBlock.Block = {
@@ -125,14 +133,14 @@ object TextBlock {
   type Line = List[Word]
   type Document = List[Line]
 
-  def apply(doc: JList[JList[Word]], oheight: Double) = {
+  def apply(doc: JList[JList[Word]], oheight: Double, title: String) = {
     var tmp: List[Line] = List[Line]()
 
     for (i <- 0 to doc.size() - 1) {
       tmp :+= doc.get(i).toList
     }
 
-    new TextBlock(tmp, oheight)
+    new TextBlock(tmp, oheight, title)
   }
 }
 

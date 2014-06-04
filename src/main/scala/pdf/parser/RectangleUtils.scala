@@ -69,7 +69,7 @@ object RectangleUtils {
     if (!foundList.isEmpty) {
       val found = foundList(0)
       val lineSpacing = findMostRecent(obstacleList)
-      println(lineSpacing)
+     // println(lineSpacing)
       val whiteBound = Rectangle(Point(bound.topLeft.x, found.topLeft.y), Point(bound.bottomRight.x, found.bottomRight.y))
       val obs = findInner(whiteBound, obstacleList)
       findCandidatesVertical(whiteBound, obs).filter(x => x.height > lineSpacing * 3).take(5)

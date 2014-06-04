@@ -17,7 +17,7 @@ class Controller extends Actor with ActorLogging {
   
   var cache = Set.empty[String]
   var children = Set.empty[ActorRef]
-  
+
   context.setReceiveTimeout(10.seconds)
   
   def getterProps(url: String, depth: Int): Props = Props(new Getter(url, depth))

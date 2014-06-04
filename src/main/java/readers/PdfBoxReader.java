@@ -16,54 +16,57 @@ import java.util.List;
 import static pdf.parser.TextBlock.apply;
 
 public class PdfBoxReader {
-    public static Object lock = new Object();
+
+	public static void readFile(String name) {
+		PDDocument doc = null;
+
+		try (InputStream is = PdfBoxReader.class.getResourceAsStream(name)) {
+			PDFParser parser = null;
+			COSDocument cosDoc = null;
+			parser = new PDFParser(is);
+			parser.parse();
+			cosDoc = parser.getDocument();
+
+			doc = new PDDocument(cosDoc);
+
+			try (PrintWriter out = new PrintWriter(new FileOutputStream("del-out.txt"))) {
+
+				int n = doc.getNumberOfPages();
+				//               int n = 5;
+
+				for (int i = n-2; i <= n; i++) {
+
+					final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
+
+
+					final String text = stripper.getText(doc);
+
+//					out.println(text);
+
+					final TextBlock block = getBlock(stripper.getResult(), name);
+
+
+//					System.out.println("-------start of " + i + "---------------");
+					printBlock(block);
+//					System.out.println("-------end of " + i + "---------------");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (doc != null) {
+				try {
+					doc.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 
     public static void main(String[] args) {
-
-        PDDocument doc = null;
-
-        try (InputStream is = PdfBoxReader.class.getResourceAsStream("test.pdf")) {
-            PDFParser parser = null;
-            COSDocument cosDoc = null;
-            parser = new PDFParser(is);
-            parser.parse();
-            cosDoc = parser.getDocument();
-
-            doc = new PDDocument(cosDoc);
-
-            try (PrintWriter out = new PrintWriter(new FileOutputStream("del-out.txt"))) {
-
-                  int n = doc.getNumberOfPages();
- //               int n = 5;
-
-                for (int i = 1; i <= n; i++) {
-
-                    final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
-
-
-                    final String text = stripper.getText(doc);
-
-                    out.println(text);
-
-                    final TextBlock block = getBlock(stripper.getResult());
-
-
-                    System.out.println("-------start of " + i + "---------------");
-                    printBlock(block);
-                    System.out.println("-------end of " + i + "---------------");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (doc != null) {
-                try {
-                    doc.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+		readFile("test.pdf");
     }
 
     public static TextBlock getTextBlock(int page) {
@@ -82,7 +85,7 @@ public class PdfBoxReader {
             final CustomPdfTextStripper stripper = new CustomPdfTextStripper(page);
             final String text = stripper.getText(doc);
 
-            final TextBlock block = getBlock(stripper.getResult());
+            final TextBlock block = getBlock(stripper.getResult(), "default");
 
             return block;
         } catch (IOException e) {
@@ -110,8 +113,8 @@ public class PdfBoxReader {
     }
 
 
-    public static TextBlock getBlock(List<List<PDFTextStripper.WordWithTextPositions>> lines) {
+    public static TextBlock getBlock(List<List<PDFTextStripper.WordWithTextPositions>> lines, String title) {
         final Double pageHeight = (double) lines.get(0).get(0).getTextPositions().get(0).getPageHeight();
-        return apply(lines, pageHeight);
+        return apply(lines, pageHeight, title);
     }
 }

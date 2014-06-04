@@ -29,7 +29,8 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter" % "1.0.1.RELEASE",
   "org.springframework" % "spring-test" % "4.0.0.RELEASE" % "test",
   "org.scalatest" % "scalatest_2.10" % "2.1.3" % "test",
-  "org.apache.opennlp" % "opennlp-tools" % "1.5.3"
+  "org.apache.opennlp" % "opennlp-tools" % "1.5.3",
+  "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
 )
 
 scalacOptions ++= Seq("-feature", "-language:implicitConversions")
