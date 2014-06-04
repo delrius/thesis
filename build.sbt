@@ -32,3 +32,4 @@ libraryDependencies ++= Seq(
   "org.apache.opennlp" % "opennlp-tools" % "1.5.3"
 )
 
+scalacOptions ++= Seq("-feature", "-language:implicitConversions")
