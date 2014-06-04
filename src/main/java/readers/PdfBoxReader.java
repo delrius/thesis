@@ -100,12 +100,12 @@ public class PdfBoxReader {
     }
 
     public static void printBlock(TextBlock block) {
-      //  System.out.println(block.toString());
-     //   System.out.println(block.print());
-     //   System.out.println(block.printWhite());
-     //   System.out.println("-------------columns----------------------");
-    //    System.out.println(block.printColumns());
-     //     block.printBlocks();
+//        System.out.println(block.toString());
+//        System.out.println(block.print());
+//        System.out.println(block.printWhite());
+//        System.out.println("-------------columns----------------------");
+//        System.out.println(block.printColumns());
+//          block.printBlocks();
         block.printReferences();
     }
 

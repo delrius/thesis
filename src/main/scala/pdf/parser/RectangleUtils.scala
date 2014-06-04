@@ -65,12 +65,17 @@ object RectangleUtils {
 
 
   def findWhites(bound: Rectangle, obstacleList: List[Rectangle]): List[Rectangle] = {
-    val found = findWhiteSpaces(bound, obstacleList)(0)
-    val lineSpacing = findMostRecent(obstacleList)
-    println(lineSpacing)
-    val whiteBound = Rectangle (Point(bound.topLeft.x, found.topLeft.y), Point(bound.bottomRight.x, found.bottomRight.y))
-    val obs = findInner(whiteBound, obstacleList)
-    findCandidatesVertical(whiteBound, obs).filter(x => x.height > lineSpacing * 3).take(5)
+    val foundList = findWhiteSpaces(bound, obstacleList)
+    if (!foundList.isEmpty) {
+      val found = foundList(0)
+      val lineSpacing = findMostRecent(obstacleList)
+      println(lineSpacing)
+      val whiteBound = Rectangle(Point(bound.topLeft.x, found.topLeft.y), Point(bound.bottomRight.x, found.bottomRight.y))
+      val obs = findInner(whiteBound, obstacleList)
+      findCandidatesVertical(whiteBound, obs).filter(x => x.height > lineSpacing * 3).take(5)
+    } else {
+      List.empty
+    }
   }
 
   private def findMostRecent(obstacleList: List[Rectangle]):Int = {

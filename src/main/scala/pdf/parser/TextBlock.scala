@@ -48,7 +48,8 @@ class TextBlock(val list: Document, val oheight: Double) {
   def getBlocks = {
     var blocksR = List.empty[TextBlock.Block]
     for (whitespace <- findWhite) {
-      val gaps = RectangleUtils.findWhites(Rectangle(Point(topLeft.x, whitespace.topLeft.y), Point(bottomRight.x, whitespace.bottomRight.y)), blocks)
+      val bound = Rectangle(Point(topLeft.x, whitespace.topLeft.y), Point(bottomRight.x, whitespace.bottomRight.y))
+      val gaps = RectangleUtils.findWhites(bound, RectangleUtils.findInner(bound, blocks))
       if (gaps.isEmpty) {
         val col1 = Rectangle(Point(topLeft.x, whitespace.topLeft.y), Point(whitespace.topLeft.x, whitespace.bottomRight.y))
         val col2 = Rectangle(Point(whitespace.bottomRight.x, whitespace.topLeft.y), Point(bottomRight.x, whitespace.bottomRight.y))
