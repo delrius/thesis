@@ -27,7 +27,7 @@ class Main extends Actor with LazyLogging {
   def receive = {
     case Result(url, set) => {
       val links = applyFilter(set - url)
-//      logger.info(links.toVector.sorted.map(trimToFileName(_)).mkString(s"Results for '$url':\n", "\n", "\n"));
+      logger.info(links.toVector.sorted.map(trimToFileName(_)).mkString(s"Results for '$url':\n", "\n", "\n"));
 //      for (x <- links) {
 //        val trimmed = trimToFileName(x)
 //        logger.info("Writing " + trimmed + " to disk....")

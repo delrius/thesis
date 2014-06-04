@@ -56,8 +56,7 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
         val col2 = Rectangle(Point(whitespace.bottomRight.x, whitespace.topLeft.y), Point(bottomRight.x, whitespace.bottomRight.y))
         blocksR :+= getLines(col1)
         blocksR :+= getLines(col2)
-      } else {
-//        require(gaps.size < 2, gaps.size)
+      } else if (gaps.size == 1) {
         val gap = gaps.get(0)
         val col1 = RectangleUtils.checkRectangle(Point(topLeft.x, whitespace.topLeft.y), Point(whitespace.topLeft.x, gap.topLeft.y))
         val col2 = RectangleUtils.checkRectangle(Point(whitespace.bottomRight.x, whitespace.topLeft.y), Point(bottomRight.x, gap.topLeft.y))
@@ -65,6 +64,21 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
         val col4 = RectangleUtils.checkRectangle(Point(whitespace.bottomRight.x, gap.bottomRight.y), Point(bottomRight.x, whitespace.bottomRight.y))
 
         List[Option[Rectangle]](col1, col2, col3, col4).filter(!_.isEmpty).map(x => getLines(x.get)).toList.foreach(x => blocksR +:= x)
+
+      } else {
+        for (i <- -1 to gaps.size - 1) {
+
+          val topleftY = if (i < 0) whitespace.topLeft.y else gaps.get(i).bottomRight.y
+          val bottomRightY = if (i == gaps.size - 1) whitespace.bottomRight.y else gaps.get(i+1).topLeft.y
+
+          val col1 = RectangleUtils.checkRectangle(Point(topLeft.x, topleftY), Point(whitespace.topLeft.x, bottomRightY))
+          val col2 = RectangleUtils.checkRectangle(Point(whitespace.bottomRight.x, topleftY), Point(bottomRight.x, bottomRightY))
+
+          // val col3 = RectangleUtils.checkRectangle(Point(topLeft.x, gap.bottomRight.y), Point(whitespace.topLeft.x, bottomRightY))
+          //val col4 = RectangleUtils.checkRectangle(Point(whitespace.bottomRight.x, gap.bottomRight.y), Point(bottomRight.x, bottomRightY))
+
+          List[Option[Rectangle]](col1, col2).filter(!_.isEmpty).map(x => getLines(x.get)).toList.foreach(x => blocksR +:= x)
+        }
       }
     }
     blocksR.reverse
@@ -72,11 +86,11 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
 
   def printReferences = references foreach blockPrinter
 
-//  def printBlocks = {
-//    val bl = getBlocks
-//    println(Structure(bl).findMostUsedFontSize(bl) + "<--------------------------------------")
-//    bl foreach blockPrinter
-//  }
+  def printBlocks = {
+    val bl = getBlocks
+    println(Structure(bl).findMostUsedFontSize(bl) + "<--------------------------------------")
+    bl foreach blockPrinter
+  }
 
   def blockPrinter(block: TextBlock.Block): Unit = {
     val out = Path("tmp", article.replaceAll("pdf", "txt"))

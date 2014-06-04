@@ -34,7 +34,7 @@ public class PdfBoxReader {
 				int n = doc.getNumberOfPages();
 				//               int n = 5;
 
-				for (int i = n-2; i <= n; i++) {
+				for (int i = n-1; i <= n; i++) {
 
 					final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
 
@@ -66,7 +66,7 @@ public class PdfBoxReader {
 
 
     public static void main(String[] args) {
-		readFile("test.pdf");
+		readFile("_10_apostol_av.pdf");
     }
 
     public static TextBlock getTextBlock(int page) {

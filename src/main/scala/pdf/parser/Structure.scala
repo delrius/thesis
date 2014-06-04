@@ -6,7 +6,7 @@ import org.apache.pdfbox.util.TextPosition
 import scala.annotation.tailrec
 
 case class Structure(val blocks: List[Block]) {
-  lazy val mostUsedFont: Int = findMostUsedFontSize(blocks)
+  lazy val mostUsedFont: Int = 10 //FIXME: findMostUsedFontSize(blocks)
   type FontMap = Map[Int, BigDecimal]
 
   def findReferences(): List[Block] = {

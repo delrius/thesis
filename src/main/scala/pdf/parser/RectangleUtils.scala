@@ -72,7 +72,7 @@ object RectangleUtils {
      // println(lineSpacing)
       val whiteBound = Rectangle(Point(bound.topLeft.x, found.topLeft.y), Point(bound.bottomRight.x, found.bottomRight.y))
       val obs = findInner(whiteBound, obstacleList)
-      findCandidatesVertical(whiteBound, obs).filter(x => x.height > lineSpacing * 3).take(5)
+      findCandidatesVertical(whiteBound, obs).filter(x => x.height > lineSpacing + 5).sortBy(_.topLeft.y).reverse
     } else {
       List.empty
     }
