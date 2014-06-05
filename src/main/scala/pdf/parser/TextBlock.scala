@@ -8,6 +8,8 @@ import collection.JavaConversions._
 import org.apache.pdfbox.util.TextPosition
 import scalax.file.Path
 import scala.language.postfixOps
+import reference.{Reference, ReferenceParser}
+import spring.Runner
 
 class TextBlock(val list: Document, val oheight: Double, val article: String) {
 
@@ -84,7 +86,7 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
     blocksR.reverse
   }
 
-  def printReferences = references foreach blockPrinter
+  def printReferences: java.util.List[Reference] = seqAsJavaList(references map blockPrinterX flatten)
 
   def printBlocks = {
     val bl = getBlocks
@@ -92,15 +94,35 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
     bl foreach blockPrinter
   }
 
-  def blockPrinter(block: TextBlock.Block): Unit = {
-    val out = Path("tmp", article.replaceAll("pdf", "txt"))
+  def blockPrinterX(block: TextBlock.Block): java.util.List[Reference] = {
+    val out = StringBuilder.newBuilder
 
     def appendln(s: String) = {
-      out.append(s)
-      out.append("\n")
+      out ++= s
+      out ++= ("\n")
     }
 
     block.map(l => l.map(_.getText).toList.mkString(" ").replaceAll(",", " ,")).foreach(appendln)
+
+    val refs = ReferenceParser.getReferences(out.toString())
+    refs
+  }
+
+
+  def blockPrinter(block: TextBlock.Block): Unit = {
+    val out = StringBuilder.newBuilder
+    val outF = Path("tmp", article.replaceAll("pdf", "txt"))
+
+    def appendln(s: String) = {
+      out ++= s
+      out ++= ("\n")
+    }
+
+    block.map(l => l.map(_.getText).toList.mkString(" ").replaceAll(",", " ,")).foreach(appendln)
+
+    outF.append(out.toString())
+    val refs = asScalaBuffer(ReferenceParser.getReferences(out.toString()))
+    refs.foreach(x => outF.append(x.toString +"\n"))
   }
 
   def getLines(r: Rectangle): TextBlock.Block = {
@@ -129,16 +151,18 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
   // find title and author
   def findByText(text:String) = list.filter(p => p.map(_.getText).mkString("").contains(text))
 
-  def findAuthorAndTitle = {
+  def findAuthorAndTitle() : (String, String) = {
     val anchor = findByText("УДК").head
     val afterAnchor = list.filter(p=>p.get(0).getTextPositions.get(0).getYDirAdj > anchor.get(0).getTextPositions.get(0).getYDirAdj)
       .sortBy(_.get(0).getTextPositions.get(0).getYDirAdj)
     val authorList = afterAnchor.head
     val title = afterAnchor.tail.takeWhile(p => p.get(0).getTextPositions.get(0).getFontSizeInPt > 10)
-    println(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,"))
-    println(title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
+    //println(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,"))
+    //println(title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
+    (getAuthors(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,")), title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
   }
 
+  def getAuthors(list: String): String = list
 
   override def toString: String = blocks.mkString("\n")
 

@@ -31,7 +31,7 @@ case class Author(val name: String) {
 }
 
 @RelationshipEntity(`type` = "REFERENCES")
-case class ReferencesRelation (@StartNode start:Author, @Fetch @EndNode end: Author, @Fetch in: String, @Fetch out: String) {
+case class ReferencesRelation (@StartNode start:Author, @Fetch @EndNode end: Author, @Fetch workCited: String, @Fetch workCitedIn: String) {
   @GraphId
   var id: java.lang.Long = _
 

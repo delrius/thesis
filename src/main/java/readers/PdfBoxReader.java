@@ -1,18 +1,27 @@
 package readers;
 
+import com.cybozu.labs.langdetect.LangDetectException;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import pdf.parser.TextBlock;
+import reference.RefList;
+import reference.Reference;
+import reference.ReferenceParser;
+import scala.Tuple2;
 import utils.CustomPdfTextStripper;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static pdf.parser.TextBlock.apply;
 
 public class PdfBoxReader {
+	public static Set<RefList> refs = new HashSet<>();
 
     public static void readFile(String name) {
         PDDocument doc = null;
@@ -32,6 +41,8 @@ public class PdfBoxReader {
                 int n = doc.getNumberOfPages();
                 //               int n = 5;
 
+				long time = System.currentTimeMillis();
+				List<Reference> references = new ArrayList<>();
                 for (int i = n - 1; i <= n; i++) {
 
                     final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
@@ -45,16 +56,32 @@ public class PdfBoxReader {
 
 
 //					System.out.println("-------start of " + i + "---------------");
-                    printBlock(block);
-//					System.out.println("-------end of " + i + "---------------");
+					references.addAll(block.printReferences());
+
+					//					System.out.println("-------end of " + i + "---------------");
                 }
 
                 final CustomPdfTextStripper stripper = new CustomPdfTextStripper(1);
                 final String text = stripper.getText(doc);
                 final TextBlock block = getBlock(stripper.getResult(), name);
 
-                block.findAuthorAndTitle();
-            }
+				Tuple2<String, String> authorAndTitle = block.findAuthorAndTitle();
+
+				long endTime = System.currentTimeMillis();
+				double ti = (endTime - time) / 1000.;
+
+				System.out.println("Article: "+ authorAndTitle._2()+" by " + authorAndTitle._1());
+				System.out.println("was processed in " + ti + " seconds");
+
+				try {
+					RefList e = new RefList(ReferenceParser
+							.getAuthors(authorAndTitle._1()), authorAndTitle._2(), references);
+					e.setAuth_old(authorAndTitle._1());
+					refs.add(e);
+				} catch (LangDetectException e) {
+					e.printStackTrace();
+				}
+			}
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -113,7 +140,7 @@ public class PdfBoxReader {
 //        System.out.println("-------------columns----------------------");
 //        System.out.println(block.printColumns());
 //          block.printBlocks();
-        block.printReferences();
+//        block.printReferences();
     }
 
 

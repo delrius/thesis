@@ -37,13 +37,14 @@ class Main extends Actor with LazyLogging {
         Path("src", "main", "resources", "readers", trimmed).write(content)
         logger.info("Finished " + trimmed)
       }
+
       for (x <- links) {
         val trimmed = trimToFileName(x)
         FileUtils.clean(trimmed)
         PdfBoxReader.readFile(trimmed)
       }
 
-      Runner.main(new Array[String](0))
+      Runner.run(PdfBoxReader.refs)
     }
     case Failed(url) =>
       println(s"Failed to fetch '$url'\n")
