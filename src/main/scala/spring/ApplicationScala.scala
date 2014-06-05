@@ -18,7 +18,6 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
     new GraphDatabaseFactory().newEmbeddedDatabase(Runner.dbNameReal)
   }
 
-//  @Autowired var personRepository: PersonRepositoryScala = _
   @Autowired var personRepository: AuthorRepository = _
 
   val names: List[String] = List("Greg", "Roy", "Craig")
@@ -36,7 +35,6 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
    // persons foreach println
     save(persons)
     lookup
-    lookupteammates
   }
 
 
@@ -45,15 +43,6 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
     trans {
       for (name <- names) {
         println(personRepository.findByName(name))
-      }
-    }
-  }
-
-  def lookupteammates = {
-    println("Looking up who works with Greg...")
-    trans {
-      for (person <- personRepository.findByReferences("Greg").asScala) {
-        println(person.in + " works with Greg.")
       }
     }
   }
@@ -69,7 +58,9 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
    // println(craig)
 
     trans {
-      for (l <- list) personRepository.save(l)
+      for (l <- list) {
+        if (personRepository.findByName(l.name) == null) personRepository.save(l)
+      }
 
       val greg1 = personRepository.findByName(greg.name)
       greg1.workWith(roy, "greg-out", "roy-in")

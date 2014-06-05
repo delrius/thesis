@@ -9,6 +9,8 @@ import java.net.URL
 import scalax.io.JavaConverters._
 import scalax.file.Path
 import readers.PdfBoxReader
+import utils.FileUtils
+import spring.Runner
 
 class Main extends Actor with LazyLogging {
 
@@ -28,17 +30,20 @@ class Main extends Actor with LazyLogging {
     case Result(url, set) => {
       val links = applyFilter(set - url)
       logger.info(links.toVector.sorted.map(trimToFileName(_)).mkString(s"Results for '$url':\n", "\n", "\n"));
-//      for (x <- links) {
-//        val trimmed = trimToFileName(x)
-//        logger.info("Writing " + trimmed + " to disk....")
-//        val content = new URL(x).asInput.bytes
-//        Path("src", "main", "resources", "readers", trimmed).write(content)
-//        logger.info("Finished " + trimmed)
-//      }
       for (x <- links) {
         val trimmed = trimToFileName(x)
+        logger.info("Writing " + trimmed + " to disk....")
+        val content = new URL(x).asInput.bytes
+        Path("src", "main", "resources", "readers", trimmed).write(content)
+        logger.info("Finished " + trimmed)
+      }
+      for (x <- links) {
+        val trimmed = trimToFileName(x)
+        FileUtils.clean(trimmed)
         PdfBoxReader.readFile(trimmed)
       }
+
+      Runner.main(new Array[String](0))
     }
     case Failed(url) =>
       println(s"Failed to fetch '$url'\n")

@@ -7,66 +7,70 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import pdf.parser.TextBlock;
 import utils.CustomPdfTextStripper;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.List;
 
 import static pdf.parser.TextBlock.apply;
 
 public class PdfBoxReader {
 
-	public static void readFile(String name) {
-		PDDocument doc = null;
+    public static void readFile(String name) {
+        PDDocument doc = null;
 
-		try (InputStream is = PdfBoxReader.class.getResourceAsStream(name)) {
-			PDFParser parser = null;
-			COSDocument cosDoc = null;
-			parser = new PDFParser(is);
-			parser.parse();
-			cosDoc = parser.getDocument();
+        File ne = new File(PdfBoxReader.class.getResource(name).getFile());
+        try (InputStream is = new FileInputStream(ne)) {
+            PDFParser parser = null;
+            COSDocument cosDoc = null;
+            parser = new PDFParser(is);
+            parser.parse();
+            cosDoc = parser.getDocument();
 
-			doc = new PDDocument(cosDoc);
+            doc = new PDDocument(cosDoc);
 
-			try (PrintWriter out = new PrintWriter(new FileOutputStream("del-out.txt"))) {
+            try (PrintWriter out = new PrintWriter(new FileOutputStream("del-out.txt"))) {
 
-				int n = doc.getNumberOfPages();
-				//               int n = 5;
+                int n = doc.getNumberOfPages();
+                //               int n = 5;
 
-				for (int i = n-1; i <= n; i++) {
+                for (int i = n - 1; i <= n; i++) {
 
-					final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
+                    final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
 
 
-					final String text = stripper.getText(doc);
+                    final String text = stripper.getText(doc);
 
 //					out.println(text);
 
-					final TextBlock block = getBlock(stripper.getResult(), name);
+                    final TextBlock block = getBlock(stripper.getResult(), name);
 
 
 //					System.out.println("-------start of " + i + "---------------");
-					printBlock(block);
+                    printBlock(block);
 //					System.out.println("-------end of " + i + "---------------");
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (doc != null) {
-				try {
-					doc.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+                }
+
+                final CustomPdfTextStripper stripper = new CustomPdfTextStripper(1);
+                final String text = stripper.getText(doc);
+                final TextBlock block = getBlock(stripper.getResult(), name);
+
+                block.findAuthorAndTitle();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (doc != null) {
+                try {
+                    doc.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
     public static void main(String[] args) {
-		readFile("_10_apostol_av.pdf");
+        readFile("_10_apostol_av.pdf");
     }
 
     public static TextBlock getTextBlock(int page) {

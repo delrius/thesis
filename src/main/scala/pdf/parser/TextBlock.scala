@@ -100,14 +100,12 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
       out.append("\n")
     }
 
-    appendln("!!!!!!!!!!!!!!!!!!start!!!!!!!!!!!!!!!!")
-    block.map(l => l.map(_.getText).toList.mkString(" ")).foreach(appendln)
-    appendln("!!!!!!!!!!!!!!!!!!end!!!!!!!!!!!!!!!!!!")
-    appendln("")
+    block.map(l => l.map(_.getText).toList.mkString(" ").replaceAll(",", " ,")).foreach(appendln)
   }
 
   def getLines(r: Rectangle): TextBlock.Block = {
-    list.filter(isInRect(_, r))
+    // common issue - copyright is falsely included
+    list.filter(isInRect(_, r)).filterNot(x=>x.get(0).getText.contains("©"))
   }
 
   def isInRect(line: TextBlock.Line, r: Rectangle) = {
@@ -127,6 +125,20 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
   def areClose(x: Double, y: Double) = math.abs(x - y) < 1
 
   def tY(y: Double) = oheight - y
+
+  // find title and author
+  def findByText(text:String) = list.filter(p => p.map(_.getText).mkString("").contains(text))
+
+  def findAuthorAndTitle = {
+    val anchor = findByText("УДК").head
+    val afterAnchor = list.filter(p=>p.get(0).getTextPositions.get(0).getYDirAdj > anchor.get(0).getTextPositions.get(0).getYDirAdj)
+      .sortBy(_.get(0).getTextPositions.get(0).getYDirAdj)
+    val authorList = afterAnchor.head
+    val title = afterAnchor.tail.takeWhile(p => p.get(0).getTextPositions.get(0).getFontSizeInPt > 10)
+    println(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,"))
+    println(title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
+  }
+
 
   override def toString: String = blocks.mkString("\n")
 
