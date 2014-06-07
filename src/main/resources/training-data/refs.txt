@@ -1,0 +1,39 @@
+<START:ref> 1. <END> Handbook of Automated Reasoning  / Edited by  A. Robinson  and  A.Voronkov  . – Elsevier Science Publishers, 2001. – Vol. 1. – 1020 p.
+<START:ref> 2. <END>  Stickel M. A.   Prolog Technology Theorem Prover  / 
+ M. A. Stickel  . – New Generation Comp. – 1984. – Vol. 4. – 
+P. 371–383. 
+<START:ref> 3. <END>   Lloyd J. V.   Foundations of Logic Programming  /  J. V. Lloyd  . – 
+Berlin : Springer, 1987. – 476 p.
+<START:ref> 4. <END>  Apt K. R.   Contributions into the Theory of Logic Programming
+/  K. R. Apt  ,  M. H. van Emden  // JASM. – 1982. – Vol. 3. – 
+№ 29. – P. 841–862.
+<START:ref> 5. <END>   Gallier J.   Logic for computer science: foundations of Automatic Theorem Proving  /  J. Gallier.  – New York : Harper and Row, 
+Inc., 1986. 
+<START:ref> 6. <END>   Robinson J.   A machine-oriented logic based on resolution principle  /  J. Robinson  // Journal of the ACM. – 1965. – 
+Vol. 12. – № 1. – P. 23–41. 
+<START:ref> 7. <END>   Kanger S.   Simplifi ed proof method for elementary logic  / 
+ S. Kanger  – Comp. Program. and Form. Sys. : Stud. in Logic. 
+– Amsterdam : North-Holl., Publ. Co., 1963. – P. 87–93. 
+<START:ref> 8. <END>    Lyaletski A.   Gentzen calculi and admissible substitutions  / 
+ A. Lyaletski. – Actes Preliminaieres, du Symposium Franco-
+American National Standards Institute, Inc., Role Based Access Control, ANSI INCITS 359–2004.
+<START:ref> 2. <END>    Ferraiolo D. F.   Role Based Access Control  /  D. F. Ferraiolo  ,  D. R. Kuhn  . – 15th National Computer Security Conference, 1992.
+<START:ref> 3. <END>   Ferraiolo D. F.   Role Based Access Control : Features and Moti- vations  /  D. F. Ferraiolo  ,  J. Cugini  ,  D. R. Kuhn  . – Computer
+Security Applications Conference, 1995.
+<START:ref> 4. <END>   Sandhu R. S.   Role-Based Access Control Models  /  R. S. Sandhu  , 
+ E. J. Coyne  ,  H. L. Feinstein  ,  C. E. Youma  . – IEEE Computer
+29(2) : 38–47, IEEE Press, 1996.
+<START:ref> 5. <END>  National Computer Security Center, A Guide to Understanding
+Discretionary Access Control in Trusted Systems, Library No. S–228, 576, 1987.
+
+<START:ref> 23. <END>   Gottfredson L. S.   Mainstream Science on Intelligence  / 
+ L. S. Gottfredson  // Wall Street Journal. – December 13, 1994. – 
+P. 18.
+<START:ref> 24. <END>   Glaser R.   A research agenda for cognitive psychology and psychometrics  /  R. Glaser  // Amer. Psychologist. – 1980. – V. 36 
+(9). – P. 923–936.
+<START:ref> 25. <END>   Glaser R.   Education and thinking: The role of knowledge  / 
+ R. Glaser  // Amer. Psychologist. 1984. – V. 39(2). – P. 93–104.
+<START:ref> 26. <END>   Gui1fогd I. P.   The structure of intellect  /   I. P. Gui1fогd  // 
+Psychol. Bull – 1956. – V. 53. – P. 267–293.
+<START:ref> 27. <END>   Sternberg, R. J. Introduction /  R. J. Sternberg // Models of intelligence : International perspectives /  R. J. Sternberg , 
+J. Lautrey & T. I. Lubart  (Eds.). – Washington, DC : American Psychological Association, 2003.
