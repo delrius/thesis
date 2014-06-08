@@ -274,6 +274,6 @@ class UtilsSpec extends UnitSpec {
     result should contain (r2)
     result should contain (r3)
     result should contain (r4)
-    result should not contain (r5)
+    result should not contain r5
   }
 }

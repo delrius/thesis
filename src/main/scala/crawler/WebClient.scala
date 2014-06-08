@@ -17,10 +17,10 @@ object AsyncWebClient extends WebClient {
   private val client = new AsyncHttpClient
 
   def get(url: String)(implicit exec: Executor): Future[String] = {
-    val f = client.prepareGet(url).execute();
+    val f = client.prepareGet(url).execute()
     val p = Promise[String]()
     f.addListener(new Runnable {
-      def run = {
+      def run() = {
         val response = f.get
         if (response.getStatusCode / 100 < 4)
           p.success(response.getResponseBodyExcerpt(131072, Charset.forName("windows-1251").name()))

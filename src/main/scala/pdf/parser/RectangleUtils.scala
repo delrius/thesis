@@ -13,7 +13,7 @@ object RectangleUtils {
   val rectWidthMin = 1d
   val rectMinDistFromBorder = 5d
 
-  private def findCandidates(bound: Rectangle, obstacleList: List[Rectangle], checkEmpty:Boolean = true): List[Rectangle] = {
+  private def findCandidates(bound: Rectangle, obstacleList: List[Rectangle], checkEmpty: Boolean = true): List[Rectangle] = {
 
     val queue = new mutable.PriorityQueue[QueueElem]()(queueElemOrdering)
     queue.enqueue((bound, obstacleList))
@@ -41,27 +41,29 @@ object RectangleUtils {
   }
 
   private def findCandidatesVertical(bound: Rectangle, obstacleList: List[Rectangle]): List[Rectangle] = {
-    filterSimilars( findCandidates(bound, obstacleList, false).sortWith(_.width > _.width) )
+    filterSimilars(findCandidates(bound, obstacleList, checkEmpty = false).sortWith(_.width > _.width))
   }
 
   def findWhiteSpaces(bound: Rectangle, obstacleList: List[Rectangle]): List[Rectangle] = {
-    val result = filterSimilars (findCandidates(bound, obstacleList).sortWith(_.height > _.height))
-    val best = result.head
-    result.take(5)
-      .filter(r => math.abs(r.topLeft.x - best.topLeft.x) < 2 && math.abs(r.bottomRight.x - best.bottomRight.x) < 2)
-      .filter((r) => {
+    val result = filterSimilars(findCandidates(bound, obstacleList).sortWith(_.height > _.height))
+    if (result.isEmpty) List.empty[Rectangle]
+    else {
+      val best = result.head
+      result.take(5)
+        .filter(r => math.abs(r.topLeft.x - best.topLeft.x) < 2 && math.abs(r.bottomRight.x - best.bottomRight.x) < 2)
+        .filter((r) => {
         val left = Rectangle(Point(bound.topLeft.x, r.topLeft.y), Point(r.topLeft.x, r.bottomRight.y))
         val right = Rectangle(Point(r.bottomRight.x, r.topLeft.y), Point(bound.bottomRight.x, r.bottomRight.y))
         val lside = findInner(left, obstacleList)
         val rside = findInner(right, obstacleList)
-//        println (lside.size +" - " +rside.size)
+
         val some0 = lside.size == 0 || rside.size == 0
         val max = math.max(lside.size, rside.size)
         val min = math.min(lside.size, rside.size)
         !some0 && (max / min <= 2)
       })
+    }
   }
-
 
 
   def findWhites(bound: Rectangle, obstacleList: List[Rectangle]): List[Rectangle] = {
@@ -69,7 +71,6 @@ object RectangleUtils {
     if (!foundList.isEmpty) {
       val found = foundList(0)
       val lineSpacing = findMostRecent(obstacleList)
-     // println(lineSpacing)
       val whiteBound = Rectangle(Point(bound.topLeft.x, found.topLeft.y), Point(bound.bottomRight.x, found.bottomRight.y))
       val obs = findInner(whiteBound, obstacleList)
       findCandidatesVertical(whiteBound, obs).filter(x => x.height > lineSpacing + 5).sortBy(_.topLeft.y).reverse
@@ -78,11 +79,11 @@ object RectangleUtils {
     }
   }
 
-  private def findMostRecent(obstacleList: List[Rectangle]):Int = {
+  private def findMostRecent(obstacleList: List[Rectangle]): Int = {
     var map1 = mutable.Map[Int, Int]()
     for (i <- 0 to obstacleList.size - 2) {
       val curr = obstacleList(i)
-      val next = obstacleList(i+1)
+      val next = obstacleList(i + 1)
       val dist = (curr.bottomRight.y - next.topLeft.y).toInt
       val thisDist = map1.get(dist)
       thisDist match {
@@ -90,7 +91,7 @@ object RectangleUtils {
         case None => map1 += (dist -> 1)
       }
     }
-    return map1.maxBy(_._2)._1
+    map1.maxBy(_._2)._1
   }
 
   def filterSimilars(target: List[Rectangle]): List[Rectangle] = {
@@ -99,10 +100,10 @@ object RectangleUtils {
     def checkOutBoundHelper(target: List[Rectangle], acc: List[Rectangle]): List[Rectangle] = {
       target match {
         case List() => acc
-        case x :: tail => {
-          val isUnique = acc.filter( getInnerPart(x, _).nonEmpty ).isEmpty
+        case x :: tail =>
+          val isUnique = acc.filter(getInnerPart(x, _).nonEmpty).isEmpty
           if (isUnique) checkOutBoundHelper(tail, acc :+ x) else checkOutBoundHelper(tail, acc)
-        }
+        
       }
     }
 
@@ -112,7 +113,7 @@ object RectangleUtils {
   def checkRectangleForNormalWhiteSpace(rect: Rectangle, bound: Rectangle, checkEmpty: Boolean): Option[Rectangle] = {
     rect match {
       case r@Rectangle(Point(x1, _), Point(x2, _), _, _) if (x2 - x1 > rectWidthMin)
-        &&  (!checkEmpty || ((bound.bottomRight.x - x2 > rectMinDistFromBorder) && (x1 - bound.topLeft.x > rectMinDistFromBorder))) => Some(r)
+        && (!checkEmpty || ((bound.bottomRight.x - x2 > rectMinDistFromBorder) && (x1 - bound.topLeft.x > rectMinDistFromBorder))) => Some(r)
       case _ => None
     }
   }

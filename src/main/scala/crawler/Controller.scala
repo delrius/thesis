@@ -8,21 +8,24 @@ import scala.concurrent.duration._
 import akka.actor.ActorRef
 
 object Controller {
+
   case class Check(url: String, depth: Int)
+
   case class Result(links: Set[String])
+
 }
 
 class Controller extends Actor with ActorLogging {
+
   import Controller._
-  
+
   var cache = Set.empty[String]
   var children = Set.empty[ActorRef]
 
   context.setReceiveTimeout(10.seconds)
-  
+
   def getterProps(url: String, depth: Int): Props = Props(new Getter(url, depth))
-//TODO:  def downloaderProps(url: String): Props = Props(new )
-  
+
   def receive = {
     case Check(url, depth) =>
       log.debug("{} checking {}", depth, url)
@@ -43,8 +46,4 @@ class Controller extends Actor with ActorLogging {
 
   val DOWNLOAD_CONDITION = """(?i).*comp.*pdf.*""".r
 
-  def isCandidateForDownload(url: String) = {
-
-  }
-  
 }

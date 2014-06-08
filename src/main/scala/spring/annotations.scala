@@ -17,7 +17,7 @@ object annotations {
   type GraphProperty = org.springframework.data.neo4j.annotation.GraphProperty @field
   type GraphTraversal = org.springframework.data.neo4j.annotation.GraphTraversal @field
   type Indexed = org.springframework.data.neo4j.annotation.Indexed @field
-  type MapResult = org.springframework.data.neo4j.annotation.MapResult @field
+  type QueryResult = org.springframework.data.neo4j.annotation.QueryResult @field
   type Query = org.springframework.data.neo4j.annotation.Query @field
   type RelatedTo = org.springframework.data.neo4j.annotation.RelatedTo @field
   type RelatedToVia = org.springframework.data.neo4j.annotation.RelatedToVia @field

@@ -1,7 +1,6 @@
 package utils
 
 import pdf.parser.{Point, Rectangle}
-import readers.PdfBoxReader
 
 class WhiteSpaceFinderSpec extends UnitSpec {
   "Major white text box" should " be correct for rectangle 1" in {

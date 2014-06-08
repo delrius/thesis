@@ -7,14 +7,13 @@ import org.neo4j.graphdb.{Transaction, GraphDatabaseService}
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.neo4j.kernel.impl.util.FileUtils
-import scala.collection.JavaConverters._
-import reference.{RefList, Reference}
+import reference.RefList
 import scala.collection.mutable
-import org.springframework.data.neo4j.conversion.Handler
+import utils.CustomLogger
 
 @Configuration
 @EnableNeo4jRepositories
-class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
+class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with CustomLogger {
   setBasePackage("spring")
 
   @Bean(destroyMethod = "shutdown") def graphDatabaseService: GraphDatabaseService = {
@@ -26,27 +25,21 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
   val names: List[String] = List("Greg", "Roy", "Craig")
 
   override def run(args: String*): Unit = {
-    runPerson()
+    //runPerson()
     // test
   }
 
-  def test = {
+  def test() = {
     trans {
-      //      personRepository.findAll().handle(new Handler[Author] {
-      //        override def handle(value: Author): Unit = {
-      //          println(value.name)
-      //        }
-      //      })
       val author = personRepository.findByName("Глибовець М. М. ")
-      println(author.toString)
+      info(author.toString)
     }
   }
 
-  def runPerson() = {
-    val c: mutable.Set[RefList] = Runner.ref
+  def runPerson(refer: Set[RefList]) = {
 
-    for (reflist <- c) {
-      println("Persisting to DB article:  " + reflist.getTitle + " by " + reflist.getAuth_old)
+    for (reflist <- refer) {
+      info("Persisting to DB article:  " + reflist.getTitle + " by " + reflist.getAuth_old)
       val st = System.currentTimeMillis()
       val authors = reflist.getAuthors
       //        for (i <-0 to authors.size() - 1) {
@@ -78,28 +71,16 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
 
       val end = System.currentTimeMillis()
       val ti = (end - st) / 1000d
-      println("Persisted to DB in " + ti + " seconds")
+      info("Persisted to DB in " + ti + " seconds")
       //        }
     }
   }
 
-  def tmp = {
-
-    val greg = new Author("Greg")
-    val roy = new Author("Roy")
-    val craig = new Author("Craig")
-
-    val persons: List[Author] = List(greg, roy, craig)
-    // persons foreach println
-    save(persons)
-    lookup
-  }
-
-  def lookup = {
-    println("Lookup each person by name...")
+  def lookup() = {
+    info("Lookup each person by name...")
     trans {
       for (name <- names) {
-        println(personRepository.findByName(name))
+        info(personRepository.findByName(name).toString)
       }
     }
   }
@@ -135,7 +116,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
       f
       tx.success()
     } catch {
-      case x: Throwable => println(x)
+      case x: Throwable => info(x.getMessage)
     } finally {
       if (tx != null) {
         tx.close()
@@ -145,21 +126,30 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner {
 }
 
 
-object Runner {
+object Runner extends CustomLogger {
 
-  val dbName = "target/accessingdataneo4j1.db"
+  var cleaned: Boolean = false
   val dbNameReal = "target/real.db"
   var ref: mutable.Set[RefList] = _
+  lazy val ctx = SpringApplication.run(classOf[ApplicationScala])
 
-  def runPerson() = new ApplicationScala().runPerson()
+  def application = ctx.getBean(classOf[ApplicationScala])
 
-  def run(refer: java.util.Set[RefList]) {
-    ref = asScalaSetConverter(refer).asScala
-    FileUtils.deleteRecursively(new java.io.File(dbNameReal))
-    SpringApplication.run(classOf[ApplicationScala])
+  def runPerson(refer: java.util.Set[RefList]) = {
+    application.runPerson(refer.toArray(new Array[RefList](refer.size())).toSet)
+  }
+
+  def run() {
+    if (!cleaned) {
+      FileUtils.deleteRecursively(new java.io.File(dbNameReal))
+      cleaned = true
+      info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Cleaning DB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    }
   }
 }
 
-object Run extends App {
-  SpringApplication.run(classOf[ApplicationScala])
+object Run extends App with CustomLogger {
+  val ctx = SpringApplication.run(classOf[ApplicationScala])
+  info("Let's inspect the beans provided by Spring Boot:")
+  ctx.getBeanDefinitionNames.foreach(info)
 }

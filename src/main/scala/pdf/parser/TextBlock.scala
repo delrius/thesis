@@ -9,9 +9,9 @@ import org.apache.pdfbox.util.TextPosition
 import scalax.file.Path
 import scala.language.postfixOps
 import reference.{Reference, ReferenceParser}
-import spring.Runner
+import utils.CustomLogger
 
-class TextBlock(val list: Document, val oheight: Double, val article: String) {
+class TextBlock(val list: Document, val oheight: Double, val article: String) extends CustomLogger {
 
   implicit def con(v: TextPosition): Position = Position(v)
 
@@ -35,7 +35,7 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
     val x0 = startPosition.getXDirAdj
     val y0 = oheight - startPosition.getYDirAdj
     val x1 = endPosition.getXDirAdj + endPosition.getWidthDirAdj
-    val y1 = oheight - (math.max((startPosition.getYDirAdj + startPosition.getHeightDir), (endPosition.getYDirAdj + endPosition.getHeightDir)))
+    val y1 = oheight - math.max(startPosition.getYDirAdj + startPosition.getHeightDir, endPosition.getYDirAdj + endPosition.getHeightDir)
 
     if (Rectangle.isValid(Point(x0, y0), Point(x1, y1))) {
       Some(Rectangle(Point(x0, y0), Point(x1, y1), startPosition.getCharacter, endPosition.getCharacter))
@@ -46,7 +46,7 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
 
   lazy val structure: Structure = Structure(getBlocks)
 
-  lazy val references = structure findReferences
+  lazy val references = structure.findReferences()
 
   def getBlocks = {
     var blocksR = List.empty[TextBlock.Block]
@@ -71,13 +71,10 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
         for (i <- -1 to gaps.size - 1) {
 
           val topleftY = if (i < 0) whitespace.topLeft.y else gaps.get(i).bottomRight.y
-          val bottomRightY = if (i == gaps.size - 1) whitespace.bottomRight.y else gaps.get(i+1).topLeft.y
+          val bottomRightY = if (i == gaps.size - 1) whitespace.bottomRight.y else gaps.get(i + 1).topLeft.y
 
           val col1 = RectangleUtils.checkRectangle(Point(topLeft.x, topleftY), Point(whitespace.topLeft.x, bottomRightY))
           val col2 = RectangleUtils.checkRectangle(Point(whitespace.bottomRight.x, topleftY), Point(bottomRight.x, bottomRightY))
-
-          // val col3 = RectangleUtils.checkRectangle(Point(topLeft.x, gap.bottomRight.y), Point(whitespace.topLeft.x, bottomRightY))
-          //val col4 = RectangleUtils.checkRectangle(Point(whitespace.bottomRight.x, gap.bottomRight.y), Point(bottomRight.x, bottomRightY))
 
           List[Option[Rectangle]](col1, col2).filter(!_.isEmpty).map(x => getLines(x.get)).toList.foreach(x => blocksR +:= x)
         }
@@ -88,18 +85,14 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
 
   def printReferences: java.util.List[Reference] = seqAsJavaList(references map blockPrinterX flatten)
 
-  def printBlocks = {
-    val bl = getBlocks
-    println(Structure(bl).findMostUsedFontSize(bl) + "<--------------------------------------")
-    bl foreach blockPrinter
-  }
+  def printBlocks() = getBlocks foreach blockPrinter
 
   def blockPrinterX(block: TextBlock.Block): java.util.List[Reference] = {
     val out = StringBuilder.newBuilder
 
     def appendln(s: String) = {
       out ++= s
-      out ++= ("\n")
+      out ++= "\n"
     }
 
     block.map(l => l.map(_.getText).toList.mkString(" ").replaceAll(",", " ,")).foreach(appendln)
@@ -108,26 +101,25 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
     refs
   }
 
-
   def blockPrinter(block: TextBlock.Block): Unit = {
     val out = StringBuilder.newBuilder
-    val outF = Path("tmp", article.replaceAll("pdf", "txt"))
+    val outF = Path("tmp", System.currentTimeMillis() + article.replaceAll("pdf", "txt"))
 
     def appendln(s: String) = {
       out ++= s
-      out ++= ("\n")
+      out ++= "\n"
     }
 
     block.map(l => l.map(_.getText).toList.mkString(" ").replaceAll(",", " ,")).foreach(appendln)
 
     outF.append(out.toString())
     val refs = asScalaBuffer(ReferenceParser.getReferences(out.toString()))
-    refs.foreach(x => outF.append(x.toString +"\n"))
+    refs.foreach(x => outF.append(x.toString + "\n"))
   }
 
   def getLines(r: Rectangle): TextBlock.Block = {
     // common issue - copyright is falsely included
-    list.filter(isInRect(_, r)).filterNot(x=>x.get(0).getText.contains("©"))
+    list.filter(isInRect(_, r)).filterNot(x => x.get(0).getText.contains("©"))
   }
 
   def isInRect(line: TextBlock.Line, r: Rectangle) = {
@@ -149,16 +141,16 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
   def tY(y: Double) = oheight - y
 
   // find title and author
-  def findByText(text:String) = list.filter(p => p.map(_.getText).mkString("").contains(text))
+  def findByText(text: String) = list.filter(p => p.map(_.getText).mkString("").contains(text))
 
-  def findAuthorAndTitle() : (String, String) = {
-    val anchor = findByText("УДК").head
-    val afterAnchor = list.filter(p=>p.get(0).getTextPositions.get(0).getYDirAdj > anchor.get(0).getTextPositions.get(0).getYDirAdj)
+  def findAuthorAndTitle(): (String, String) = {
+    val anchor = if (findByText("УДК").isEmpty) findByText("УД К").head else findByText("УДК").head
+    val afterAnchor = list.filter(p => p.get(0).getTextPositions.get(0).getYDirAdj > anchor.get(0).getTextPositions.get(0).getYDirAdj)
       .sortBy(_.get(0).getTextPositions.get(0).getYDirAdj)
     val authorList = afterAnchor.head
     val title = afterAnchor.tail.takeWhile(p => p.get(0).getTextPositions.get(0).getFontSizeInPt > 10)
-    //println(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,"))
-    //println(title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
+    info(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,"))
+    info(title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
     (getAuthors(authorList.map(_.getText).mkString(" ").replaceAll(",", " ,")), title.map(f => f.map(_.getText).mkString(" ")).mkString(" "))
   }
 
@@ -174,7 +166,6 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) {
 
   def white: List[Rectangle] = findWhite
 
-  //  override def toString: String = list.map((x: Line) => x.map((x: Word) => x.getText).mkString(" ")).mkString("\n")
 }
 
 

@@ -4,19 +4,18 @@ import org.neo4j.graphdb.Direction
 import collection.JavaConverters._
 import spring.annotations._
 import org.springframework.data.neo4j.annotation.GraphId
-import org.springframework.data.neo4j.annotation.RelatedTo
 import org.springframework.data.neo4j.annotation.NodeEntity
 
 @NodeEntity
-case class Author(val name: String) {
+case class Author(name: String) {
   @GraphId
   var id: java.lang.Long = _
 
   @Fetch
   @RelatedToVia(`type` = "REFERENCES", direction = Direction.OUTGOING)
-  var references: java.util.Set[ReferencesRelation]  = _
+  var references: java.util.Set[ReferencesRelation] = _
 
-  def workWith(person: Author, in: String, out: String ) {
+  def workWith(person: Author, in: String, out: String) {
     if (references == null) {
       references = new java.util.HashSet[ReferencesRelation]()
     }
@@ -27,11 +26,12 @@ case class Author(val name: String) {
   def this() = this("")
 
   def makeSetToString = if (references == null) "" else references.asScala.map(_.end.name).mkString(", ")
-  override def toString: String = name +"->"+ makeSetToString
+
+  override def toString: String = name + "->" + makeSetToString
 }
 
 @RelationshipEntity(`type` = "REFERENCES")
-case class ReferencesRelation (@StartNode start:Author, @Fetch @EndNode end: Author, @Fetch workCited: String, @Fetch workCitedIn: String) {
+case class ReferencesRelation(@StartNode start: Author, @Fetch @EndNode end: Author, @Fetch workCited: String, @Fetch workCitedIn: String) {
   @GraphId
   var id: java.lang.Long = _
 

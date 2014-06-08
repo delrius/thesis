@@ -10,9 +10,13 @@ import reference.RefList;
 import reference.Reference;
 import reference.ReferenceParser;
 import scala.Tuple2;
+import utils.CustomLog;
 import utils.CustomPdfTextStripper;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,67 +25,66 @@ import java.util.Set;
 import static pdf.parser.TextBlock.apply;
 
 public class PdfBoxReader {
-	public static Set<RefList> refs = new HashSet<>();
+    public static Set<RefList> refs = new HashSet<>();
 
-    public static void readFile(String name) {
+    public static void clear() {
+        refs = new HashSet<>();
+    }
+
+    public static void readFile(String folder, String name) {
         PDDocument doc = null;
 
-        File ne = new File(PdfBoxReader.class.getResource(name).getFile());
+        File ne = new File(PdfBoxReader.class.getResource(folder + File.separator + name).getFile());
         try (InputStream is = new FileInputStream(ne)) {
-            PDFParser parser = null;
-            COSDocument cosDoc = null;
+            PDFParser parser;
+            COSDocument cosDoc;
             parser = new PDFParser(is);
             parser.parse();
             cosDoc = parser.getDocument();
 
             doc = new PDDocument(cosDoc);
 
-            try (PrintWriter out = new PrintWriter(new FileOutputStream("del-out.txt"))) {
+            int n = doc.getNumberOfPages();
 
-                int n = doc.getNumberOfPages();
-                //               int n = 5;
+            long time = System.currentTimeMillis();
+            List<Reference> references = new ArrayList<>();
+            for (int i = n - 1; i <= n; i++) {
 
-				long time = System.currentTimeMillis();
-				List<Reference> references = new ArrayList<>();
-                for (int i = n - 1; i <= n; i++) {
+                final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
+                // need to read text to extract lines
+                stripper.getText(doc);
 
-                    final CustomPdfTextStripper stripper = new CustomPdfTextStripper(i);
-
-
-                    final String text = stripper.getText(doc);
-
-//					out.println(text);
-
+                try {
                     final TextBlock block = getBlock(stripper.getResult(), name);
-
-
-//					System.out.println("-------start of " + i + "---------------");
-					references.addAll(block.printReferences());
-
-					//					System.out.println("-------end of " + i + "---------------");
+                    references.addAll(block.printReferences());
+                } catch (IndexOutOfBoundsException ie) {
+                    CustomLog.info("Skipped page " + i + " of " + folder + File.separator + name + " due to the emptiness");
                 }
 
-                final CustomPdfTextStripper stripper = new CustomPdfTextStripper(1);
-                final String text = stripper.getText(doc);
-                final TextBlock block = getBlock(stripper.getResult(), name);
+            }
 
-				Tuple2<String, String> authorAndTitle = block.findAuthorAndTitle();
 
-				long endTime = System.currentTimeMillis();
-				double ti = (endTime - time) / 1000.;
+            final CustomPdfTextStripper stripper = new CustomPdfTextStripper(1);
+            stripper.getText(doc);
+            final TextBlock block = getBlock(stripper.getResult(), name);
 
-				System.out.println("Article: "+ authorAndTitle._2()+" by " + authorAndTitle._1());
-				System.out.println("was processed in " + ti + " seconds");
+            Tuple2<String, String> authorAndTitle = block.findAuthorAndTitle();
 
-				try {
-					RefList e = new RefList(ReferenceParser
-							.getAuthors(authorAndTitle._1()), authorAndTitle._2(), references);
-					e.setAuth_old(authorAndTitle._1());
-					refs.add(e);
-				} catch (LangDetectException e) {
-					e.printStackTrace();
-				}
-			}
+            long endTime = System.currentTimeMillis();
+            double ti = (endTime - time) / 1000.;
+
+            CustomLog.info("Article: " + authorAndTitle._2() + " by " + authorAndTitle._1());
+            CustomLog.info("was processed in " + ti + " seconds");
+
+            try {
+                RefList e = new RefList(ReferenceParser
+                        .getAuthors(authorAndTitle._1()), authorAndTitle._2(), references);
+                e.setAuth_old(authorAndTitle._1());
+                refs.add(e);
+            } catch (LangDetectException e) {
+                e.printStackTrace();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -97,15 +100,15 @@ public class PdfBoxReader {
 
 
     public static void main(String[] args) {
-        readFile("_10_apostol_av.pdf");
+        readFile("", "_10_apostol_av.pdf");
     }
 
     public static TextBlock getTextBlock(int page) {
         PDDocument doc = null;
 
         try (InputStream is = PdfBoxReader.class.getResourceAsStream("test.pdf")) {
-            PDFParser parser = null;
-            COSDocument cosDoc = null;
+            PDFParser parser;
+            COSDocument cosDoc;
 
             parser = new PDFParser(is);
             parser.parse();
@@ -114,11 +117,9 @@ public class PdfBoxReader {
             doc = new PDDocument(cosDoc);
 
             final CustomPdfTextStripper stripper = new CustomPdfTextStripper(page);
-            final String text = stripper.getText(doc);
+            stripper.getText(doc);
 
-            final TextBlock block = getBlock(stripper.getResult(), "default");
-
-            return block;
+            return getBlock(stripper.getResult(), "default");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -133,14 +134,15 @@ public class PdfBoxReader {
         return null;
     }
 
+    @SuppressWarnings("unused")
     public static void printBlock(TextBlock block) {
-//        System.out.println(block.toString());
-//        System.out.println(block.print());
-//        System.out.println(block.printWhite());
-//        System.out.println("-------------columns----------------------");
-//        System.out.println(block.printColumns());
+//        CustomLogger.info(block.toString());
+//        CustomLogger.info(block.print());
+//        CustomLogger.info(block.printWhite());
+//        CustomLogger.info("-------------columns----------------------");
+//        CustomLogger.info(block.printColumns());
 //          block.printBlocks();
-//        block.printReferences();
+        block.printReferences();
     }
 
 

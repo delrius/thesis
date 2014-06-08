@@ -20,28 +20,15 @@ public class RefList {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public List<String> getAuthors() {
 		return authors;
-	}
-
-	public void setAuthors(List<String> authors) {
-		this.authors = authors;
 	}
 
 	public List<Reference> getReferenceList() {
 		return referenceList;
 	}
 
-	public void setReferenceList(List<Reference> referenceList) {
-		this.referenceList = referenceList;
-	}
-
 	public RefList(List<String> authors, String title, List<Reference> referenceList) {
-
 		this.title = title;
 		this.authors = authors;
 		this.referenceList = referenceList;

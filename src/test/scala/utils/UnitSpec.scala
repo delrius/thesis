@@ -17,7 +17,6 @@ OptionValues with Inside with Inspectors {
   }
 
 
-
   def contain(n: Int, actual: Rectangle) = {
     val block = PdfBoxReader.getTextBlock(n)
     var result = false
@@ -27,7 +26,7 @@ OptionValues with Inside with Inspectors {
       }
     }
     withClue("Should contain rectangle " + actual.toString) {
-      result should be(true)
+      result should be(right = true)
     }
   }
 
@@ -40,7 +39,7 @@ OptionValues with Inside with Inspectors {
 
   def checkRectangles(expected: Rectangle, actual: Rectangle) = {
     actual match {
-      case Rectangle(Point(x1, y1), Point(x2, y2), _, _) => {
+      case Rectangle(Point(x1, y1), Point(x2, y2), _, _) =>
         withClue("x top => expected = " + x1 + "; actual = " + expected.topLeft.x) {
           math.abs(x1 - expected.topLeft.x) should be <= precision
         }
@@ -53,19 +52,17 @@ OptionValues with Inside with Inspectors {
         withClue("y bottom => expected = " + y2 + "; actual = " + expected.bottomRight.y) {
           math.abs(y2 - expected.bottomRight.y) should be <= precision
         }
-      }
     }
   }
 
   def checkRectanglesSimple(expected: Rectangle, actual: Rectangle): Boolean = {
     actual match {
-      case Rectangle(Point(x1, y1), Point(x2, y2), _, _) => {
+      case Rectangle(Point(x1, y1), Point(x2, y2), _, _) =>
         val r1 = math.abs(x1 - expected.topLeft.x) <= precision
         val r2 = math.abs(x2 - expected.bottomRight.x) <= precision
         val r3 = math.abs(y1 - expected.topLeft.y) <= precision
         val r4 = math.abs(y2 - expected.bottomRight.y) <= precision
-        return r1 && r2 && r3 && r4
-      }
+        r1 && r2 && r3 && r4
       case _ => false
     }
   }

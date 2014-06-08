@@ -42,7 +42,6 @@ class Getter(url: String, depth: Int) extends Actor {
   val HREF_ATTR = """(?i).*href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^'">\s]+)).*""".r
 
   def findLinks(body: String): Iterator[String] = {
-//    println("body = " + body)
     for {
       anchor <- A_TAG.findAllMatchIn(body)
       HREF_ATTR(dquot, quot, bare) <- anchor.subgroups
