@@ -35,6 +35,8 @@ mergeStrategy in assembly <<= (mergeStrategy in assembly) {
     case PathList("org", "apache", "pdfbox", "util", "PDFTextStripper$WordWithTextPositions.class") => MergeStrategy.rename
     case PathList("org", "apache", "pdfbox", "util", "PDFTextStripper.class") => MergeStrategy.rename
     case PathList("org", "apache", "pdfbox", "util", "TextPosition.class") => MergeStrategy.rename
+    case PathList("com", "cybozu", "labs", "langdetect", "DetectorFactory.class") => MergeStrategy.rename
+    case PathList("com", "cybozu", "labs", "langdetect", "ErrorCode.class") => MergeStrategy.rename
     case PathList("org", "aspectj", xs @ _*) => MergeStrategy.first
     case x => old(x)
   }

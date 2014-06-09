@@ -58,7 +58,7 @@ public class ReferenceParser {
                     for (String person : persons) {
                         String normalized = person.trim();
                         String modified = null;
-                        for (List<String> list: variationsList) {
+                        for (List<String> list : variationsList) {
                             if (list.contains(normalized)) {
                                 modified = list.get(0);
                             }
@@ -95,7 +95,7 @@ public class ReferenceParser {
                 for (String person : persons) {
                     String normalized = person.trim();
                     String modified = null;
-                    for (List<String> list: variationsList) {
+                    for (List<String> list : variationsList) {
                         if (list.contains(normalized)) {
                             modified = list.get(0);
                         }
@@ -149,7 +149,7 @@ public class ReferenceParser {
 
     static {
         try {
-            DetectorFactory.loadProfile("/Users/del/profiles");
+            DetectorFactory.loadProfileFromClasspath("");
         } catch (LangDetectException e) {
             e.printStackTrace();
         }

@@ -37,7 +37,6 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
       info("Persisting to DB article:  " + reflist.getTitle + " by " + reflist.getAuth_old)
       val st = System.currentTimeMillis()
       val authors = reflist.getAuthors
-      //        for (i <-0 to authors.size() - 1) {
       val name = authors.get(0)
       val isin: Boolean = isInRepo(name)
       val author = if (!isin) Author(name) else get(name)
@@ -67,7 +66,6 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
       val end = System.currentTimeMillis()
       val ti = (end - st) / 1000d
       info("Persisted to DB in " + ti + " seconds")
-      //        }
     }
   }
 
