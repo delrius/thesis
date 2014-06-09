@@ -63,7 +63,6 @@ public class PdfBoxReader {
 
             }
 
-
             final CustomPdfTextStripper stripper = new CustomPdfTextStripper(1);
             stripper.getText(doc);
             final TextBlock block = getBlock(stripper.getResult(), name);
@@ -98,11 +97,6 @@ public class PdfBoxReader {
         }
     }
 
-
-    public static void main(String[] args) {
-        readFile("", "_10_apostol_av.pdf");
-    }
-
     public static TextBlock getTextBlock(int page) {
         PDDocument doc = null;
 
@@ -132,17 +126,6 @@ public class PdfBoxReader {
             }
         }
         return null;
-    }
-
-    @SuppressWarnings("unused")
-    public static void printBlock(TextBlock block) {
-//        CustomLogger.info(block.toString());
-//        CustomLogger.info(block.print());
-//        CustomLogger.info(block.printWhite());
-//        CustomLogger.info("-------------columns----------------------");
-//        CustomLogger.info(block.printColumns());
-//          block.printBlocks();
-        block.printReferences();
     }
 
 

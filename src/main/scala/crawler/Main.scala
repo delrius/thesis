@@ -52,23 +52,19 @@ class Main extends Actor with LazyLogging {
 
     PdfBoxReader.clear()
 
-    println("Processing files...")
-
     for (x <- links) {
       val trimmed = trimToFileName(x)
       FileUtils.clean(trimmed)
       PdfBoxReader.readFile(folder, trimmed)
     }
 
-    println("Persisting to db...")
-
     Runner.runPerson(PdfBoxReader.refs)
   }
 
   def trimRootResource(url: String): String = {
     val lastSlash = url.lastIndexOf("/")
-    val naukmaAnchor = url.toLowerCase.indexOf("comp") + "comp".size + 1
-    url.substring(naukmaAnchor, lastSlash)
+    val prevLastSlash = url.substring(0, lastSlash).lastIndexOf("/")
+    url.substring(prevLastSlash + 1, lastSlash)
   }
 
   def trimToFileName(url: String): String = {
@@ -77,7 +73,11 @@ class Main extends Actor with LazyLogging {
   }
 
   def applyFilter(links: Set[String]): Set[String] = {
-    def nameFilter(a: String) = a.contains("_authors") || a.contains("_content") || a.contains("_preface") || a.contains("_abstract") || a.contains("_autors") || a.contains("_prefase") || a.contains("abstr")
+    def nameFilter(a: String) = {
+      val excluded = ConfigReader.excludedPrefixes
+      excluded.filter(a.contains(_)).nonEmpty
+    }
+
     links filterNot nameFilter
   }
 

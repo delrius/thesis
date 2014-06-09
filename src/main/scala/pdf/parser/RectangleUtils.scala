@@ -201,7 +201,6 @@ object RectangleUtils {
     checkRectangle(topLeft = Point(topLeftX, topLeftY), bottomRight = Point(bottomRightX, bottomRightY))
   }
 
-  //TODO: maybe to rectangle
   def checkRectangle(topLeft: Point, bottomRight: Point): Option[Rectangle] = {
     val sidesCorrect = topLeft.x > 0 && topLeft.y > 0 && bottomRight.x > 0 && bottomRight.y > 0
     val validRect = bottomRight.x - topLeft.x > rectWidthMin && topLeft.y - bottomRight.y > rectWidthMin

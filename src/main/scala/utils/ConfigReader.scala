@@ -36,4 +36,5 @@ object ConfigReader {
   lazy val hrefPartFinder = stringConf("hrefPartFinder")
   lazy val rootLinksList = stringListConf("rootLinksList")
   lazy val authorVariationsJava = objListConfJava("authorVariations")
+  lazy val excludedPrefixes = stringListConf("excludedPrefixes")
 }

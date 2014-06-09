@@ -22,12 +22,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
 
   @Autowired var personRepository: AuthorRepository = _
 
-  val names: List[String] = List("Greg", "Roy", "Craig")
-
-  override def run(args: String*): Unit = {
-    //runPerson()
-    // test
-  }
+  override def run(args: String*): Unit = {}
 
   def test() = {
     trans {
@@ -73,15 +68,6 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
       val ti = (end - st) / 1000d
       info("Persisted to DB in " + ti + " seconds")
       //        }
-    }
-  }
-
-  def lookup() = {
-    info("Lookup each person by name...")
-    trans {
-      for (name <- names) {
-        info(personRepository.findByName(name).toString)
-      }
     }
   }
 

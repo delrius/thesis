@@ -129,16 +129,16 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) ex
     val endPosition: TextPosition = endPositions.get(endPositions.size() - 1)
 
     val isX0 = startPosition.getXDirAdj >= r.topLeft.x || areClose(startPosition.getXDirAdj, r.topLeft.x)
-    val isY0 = startPosition.getYDirAdj >= tY(r.topLeft.y) || areClose(startPosition.getYDirAdj, tY(r.topLeft.y))
+    val isY0 = startPosition.getYDirAdj >= convertYCoord(r.topLeft.y) || areClose(startPosition.getYDirAdj, convertYCoord(r.topLeft.y))
     val isX1 = endPosition.getXDirAdj <= r.bottomRight.x || areClose(endPosition.getXDirAdj, r.bottomRight.x)
-    val isY1 = endPosition.getYDirAdj <= tY(r.bottomRight.y) || areClose(endPosition.getYDirAdj, tY(r.bottomRight.y))
+    val isY1 = endPosition.getYDirAdj <= convertYCoord(r.bottomRight.y) || areClose(endPosition.getYDirAdj, convertYCoord(r.bottomRight.y))
 
     isX0 && isX1 && isY0 && isY1
   }
 
   def areClose(x: Double, y: Double) = math.abs(x - y) < 1
 
-  def tY(y: Double) = oheight - y
+  def convertYCoord(y: Double) = oheight - y
 
   // find title and author
   def findByText(text: String) = list.filter(p => p.map(_.getText).mkString("").contains(text))

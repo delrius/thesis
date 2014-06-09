@@ -238,11 +238,6 @@ public class ReferenceParser {
                     Span reducedNames[] = NameFinderME.dropOverlappingSpans(
                             names.toArray(new Span[names.size()]));
 
-//					NameSample nameSample = new NameSample(whitespaceTokenizerLine,
-//							reducedNames, false);
-
-                    //System.out.println(nameSample.toString());
-
                     buffer.addAll(Arrays.asList(new SpansListWrapper(whitespaceTokenizerLine, reducedNames)));
                 }
                 return buffer;
