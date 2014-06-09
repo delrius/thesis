@@ -34,7 +34,7 @@ public class PdfBoxReader {
     public static void readFile(String folder, String name) {
         PDDocument doc = null;
 
-        File ne = new File(PdfBoxReader.class.getResource(folder + File.separator + name).getFile());
+        File ne = new File("tmp" + File.separator + folder + File.separator + name);
         try (InputStream is = new FileInputStream(ne)) {
             PDFParser parser;
             COSDocument cosDoc;

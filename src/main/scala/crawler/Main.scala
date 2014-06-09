@@ -6,8 +6,11 @@ import scala.concurrent.duration._
 import akka.actor.ReceiveTimeout
 import com.typesafe.scalalogging.slf4j.LazyLogging
 import readers.PdfBoxReader
-import utils.FileUtils
+import utils.{ConfigReader, FileUtils}
 import spring.Runner
+import scalax.file.Path
+import java.net.URL
+import scalax.io.JavaConverters._
 
 class Main extends Actor with LazyLogging {
 
@@ -17,14 +20,11 @@ class Main extends Actor with LazyLogging {
 
   Runner.run()
 
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2009_99/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2008_86/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2007_73/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2005_36/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2003_21/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2002_19-20/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/2000_18/index.html")
-  receptionist ! Get("http://www.nbuv.gov.ua/ujrn/Soc_Gum/NaUKMA/Comp/1999_16/index.html")
+  println("Writing output to log file")
+
+  for (link <- ConfigReader.rootLinksList) {
+    receptionist ! Get(link)
+  }
 
   context.setReceiveTimeout(10.seconds)
 
@@ -42,21 +42,25 @@ class Main extends Actor with LazyLogging {
     logger.info("\n")
     logger.info(links.toVector.sorted.map(trimToFileName).mkString(s"Results for '$url':\n", "\n", "\n"))
     val folder = trimRootResource(url)
-    //      for (x <- links) {
-    //        val trimmed = trimToFileName(x)
-    //        logger.info("Writing " + trimmed + " to disk....")
-    //        val content = new URL(x).asInput.bytes
-    //        Path("src", "main", "resources", "readers", folder, trimmed).write(content)
-    //        logger.info("Finished " + trimmed)
-    //      }
+    for (x <- links) {
+      val trimmed = trimToFileName(x)
+      logger.info("Writing " + trimmed + " to disk....")
+      val content = new URL(x).asInput.bytes
+      Path("tmp", folder, trimmed).write(content)
+      logger.info("Finished " + trimmed)
+    }
 
     PdfBoxReader.clear()
+
+    println("Processing files...")
 
     for (x <- links) {
       val trimmed = trimToFileName(x)
       FileUtils.clean(trimmed)
       PdfBoxReader.readFile(folder, trimmed)
     }
+
+    println("Persisting to db...")
 
     Runner.runPerson(PdfBoxReader.refs)
   }

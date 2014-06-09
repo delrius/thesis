@@ -5,6 +5,7 @@ import akka.pattern.pipe
 import java.util.concurrent.Executor
 import akka.actor.Status
 import scala.concurrent.ExecutionContext
+import utils.ConfigReader
 
 object Getter {
   case object Done
@@ -38,8 +39,8 @@ class Getter(url: String, depth: Int) extends Actor {
     context.stop(self)
   }
 
-  val A_TAG = "(?i)<a ([^>]+)>.+?</a>".r
-  val HREF_ATTR = """(?i).*href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^'">\s]+)).*""".r
+  val A_TAG = ConfigReader.anchorTagFinder.r
+  val HREF_ATTR = ConfigReader.hrefPartFinder.r
 
   def findLinks(body: String): Iterator[String] = {
     for {

@@ -6,6 +6,7 @@ import akka.actor.ActorLogging
 import akka.actor.ReceiveTimeout
 import scala.concurrent.duration._
 import akka.actor.ActorRef
+import utils.ConfigReader
 
 object Controller {
 
@@ -44,6 +45,6 @@ class Controller extends Actor with ActorLogging {
       context.children foreach (_ ! Getter.Abort)
   }
 
-  val DOWNLOAD_CONDITION = """(?i).*comp.*pdf.*""".r
+  val DOWNLOAD_CONDITION = ConfigReader.downloadCondition.r
 
 }

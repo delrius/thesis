@@ -1,7 +1,3 @@
-//If you are using SBT to build your project, there's a plugin for intellij. You can add the plugin conf in your projects plugins.sbt file,
-//for example (mine looks like this at the moment for one of my projects): resolvers += "sbt-idea-repo" at "mpeltonen.github.com/maven/";.
-//Then you restart SBT, update, and type in gen-idea, which generates an IntelliJ project for you. Voila, all your dependencies configured for you.
-
 name := "thesis"
 
 version := "1.0"
@@ -30,7 +26,8 @@ libraryDependencies ++= Seq(
   "org.springframework" % "spring-test" % "4.0.0.RELEASE" % "test",
   "org.scalatest" % "scalatest_2.10" % "2.1.3" % "test",
   "org.apache.opennlp" % "opennlp-tools" % "1.5.3",
-  "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
+  "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
+  "com.typesafe" % "config" % "1.2.1"
 )
 
 scalacOptions ++= Seq("-feature", "-language:implicitConversions")
