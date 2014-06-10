@@ -31,7 +31,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
     }
   }
 
-  def runPerson(refer: Set[RefList]) = {
+  def persistReferences(refer: Set[RefList]) = {
 
     for (reflist <- refer) {
       info("Persisting to DB article:  " + reflist.getTitle + " by " + reflist.getAuth_old)
@@ -39,7 +39,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
       val authors = reflist.getAuthors
       val name = authors.get(0)
       val isin: Boolean = isInRepo(name)
-      val author = if (!isin) Author(name) else get(name)
+      val author = if (!isin) Author(name) else getAuthorByName(name)
       if (!isin) {
         save(List(author))
       }
@@ -52,12 +52,13 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
 
         for (j <- 0 to auth.size() - 1) {
           val isRf: Boolean = isInRepo(auth.get(j))
-          val referee = if (!isRf) Author(auth.get(j)) else get(auth.get(j))
+          val referee = if (!isRf) Author(auth.get(j)) else getAuthorByName(auth.get(j))
           if (!isRf) {
             save(List(referee))
           }
           trans {
             author.workWith(referee, artname, reflist.getTitle)
+
             personRepository.save(author)
           }
         }
@@ -69,7 +70,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
     }
   }
 
-  def get(name: String): Author = {
+  def getAuthorByName(name: String): Author = {
     var author: Author = null
     trans {
       author = personRepository.findByName(name)
@@ -120,7 +121,7 @@ object Runner extends CustomLogger {
   def application = ctx.getBean(classOf[ApplicationScala])
 
   def runPerson(refer: java.util.Set[RefList]) = {
-    application.runPerson(refer.toArray(new Array[RefList](refer.size())).toSet)
+    application.persistReferences(refer.toArray(new Array[RefList](refer.size())).toSet)
   }
 
   def run() {
