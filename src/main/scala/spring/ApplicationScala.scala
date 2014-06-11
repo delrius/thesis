@@ -22,7 +22,12 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
 
   @Autowired var personRepository: AuthorRepository = _
 
-  override def run(args: String*): Unit = {}
+  override def run(args: String*): Unit = {
+    val aut: Author = personRepository.findByName("Мейтус В. Ю.")
+    println( aut.toString )
+
+
+  }
 
   def test() = {
     trans {
@@ -137,4 +142,5 @@ object Run extends App with CustomLogger {
   val ctx = SpringApplication.run(classOf[ApplicationScala])
   info("Let's inspect the beans provided by Spring Boot:")
   ctx.getBeanDefinitionNames.foreach(info)
+
 }

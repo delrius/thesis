@@ -42,19 +42,20 @@ class Main extends Actor with LazyLogging {
     logger.info("\n")
     logger.info(links.toVector.sorted.map(trimToFileName).mkString(s"Results for '$url':\n", "\n", "\n"))
     val folder = trimRootResource(url)
-    for (x <- links) {
-      val trimmed = trimToFileName(x)
-      logger.info("Writing " + trimmed + " to disk....")
-      val content = new URL(x).asInput.bytes
-      Path("tmp", folder, trimmed).write(content)
-      logger.info("Finished " + trimmed)
-    }
+//    for (x <- links) {
+//      val trimmed = trimToFileName(x)
+//      logger.info("Writing " + trimmed + " to disk....")
+//      val content = new URL(x).asInput.bytes
+//      Path("tmp", folder, trimmed).write(content)
+//      logger.info("Finished " + trimmed)
+//    }
 
     PdfBoxReader.clear()
 
     for (x <- links) {
       val trimmed = trimToFileName(x)
       FileUtils.clean(trimmed)
+      Path("refs", folder, trimmed+".txt").write("Starting ... \n\n")
       PdfBoxReader.readFile(folder, trimmed)
     }
 

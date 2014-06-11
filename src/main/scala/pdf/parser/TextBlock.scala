@@ -85,6 +85,8 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) ex
 
   def printReferences: java.util.List[Reference] = seqAsJavaList(references map blockPrinterX flatten)
 
+  def printReferenceBlocks() = references.map(blockPrinterString).mkString("\n")
+
   def printBlocks() = getBlocks foreach blockPrinter
 
   def blockPrinterX(block: TextBlock.Block): java.util.List[Reference] = {
@@ -99,6 +101,19 @@ class TextBlock(val list: Document, val oheight: Double, val article: String) ex
 
     val refs = ReferenceParser.getReferences(out.toString())
     refs
+  }
+
+  def blockPrinterString(block: TextBlock.Block): String = {
+    val out = StringBuilder.newBuilder
+
+    def appendln(s: String) = {
+      out ++= s
+      out ++= "\n"
+    }
+
+    block.map(l => l.map(_.getText).toList.mkString(" ").replaceAll(",", " ,")).foreach(appendln)
+
+    out.toString()
   }
 
   def blockPrinter(block: TextBlock.Block): Unit = {
