@@ -21,8 +21,10 @@ class Getter(url: String, depth: Int) extends Actor {
   client get url pipeTo self
 
   def prepareLink(body: String): String = {
-    val str = url.substring(0, url.lastIndexOf("/")+1)
-    str + body
+    if (!body.contains("http")) {
+      val str = url.substring(0, url.lastIndexOf("/") + 1)
+      str + body
+    } else body
   }
 
   def receive = {
