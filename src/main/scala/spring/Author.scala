@@ -13,19 +13,20 @@ case class Author(name: String) {
 
   @Fetch
   @RelatedToVia(`type` = "REFERENCES", direction = Direction.OUTGOING)
-  var references: java.util.Set[ReferencesRelation] = _
+  var references: java.util.Collection[ReferencesRelation] = _
 
-  def workWith(person: Author, in: String, out: String) {
+  def workWith(person: Author, in: String, out: String): ReferencesRelation = {
     if (references == null) {
       references = new java.util.HashSet[ReferencesRelation]()
     }
-
-    references.add(ReferencesRelation(this, person, in, out))
+    val ref = ReferencesRelation(this, person, in, out)
+    references.add(ref)
+    ref
   }
 
   def this() = this("")
 
-  def makeSetToString = if (references == null) "" else references.asScala.map(_.end.name).mkString(", ")
+  def makeSetToString = if (references == null) "" else references.asScala.map(x => "[" + x.workCited + " by " + x.end.name + " in " + x.workCitedIn + "]").mkString(", ")
 
   override def toString: String = name + "->" + makeSetToString
 }

@@ -70,7 +70,8 @@ public class ReferenceParser {
                         }
                     }
 
-                    references.add(new Reference(result, titles.get(0)));
+                    String title = process(titles.get(0));
+                    references.add(new Reference(result, title));
                 }
             }
 
@@ -78,6 +79,11 @@ public class ReferenceParser {
         }
         return references;
     }
+
+    private static String process(String s) {
+       return s.replaceAll("¬ ", "").replaceAll("¬", "").replaceAll("- ", "");
+    }
+
 
     public static List<String> getAuthors(String string) throws IOException, LangDetectException {
         List<List<String>> variationsList = ConfigReader.authorVariationsJava();

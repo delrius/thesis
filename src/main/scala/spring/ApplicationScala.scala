@@ -7,6 +7,7 @@ import org.neo4j.graphdb.{Transaction, GraphDatabaseService}
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.neo4j.kernel.impl.util.FileUtils
+import org.springframework.data.neo4j.support.Neo4jTemplate
 import reference.RefList
 import scala.collection.mutable
 import utils.CustomLogger
@@ -22,11 +23,13 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
 
   @Autowired var personRepository: AuthorRepository = _
 
+  @Autowired var template: Neo4jTemplate = _
+
   override def run(args: String*): Unit = {
-    val aut: Author = personRepository.findByName("Мейтус В. Ю.")
-    println( aut.toString )
-
-
+    trans {
+      val aut: Author = personRepository.findByName("Олецький О. В.")
+      println(aut.toString)
+    }
   }
 
   def test() = {
@@ -62,9 +65,8 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
             save(List(referee))
           }
           trans {
-            author.workWith(referee, artname, reflist.getTitle)
-
-            personRepository.save(author)
+            val rel = author.workWith(referee, artname, reflist.getTitle)
+            template.save(rel)
           }
         }
       }
