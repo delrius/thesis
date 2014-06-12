@@ -15,7 +15,7 @@ case class Author(name: String) {
   @RelatedToVia(`type` = "REFERENCES", direction = Direction.OUTGOING)
   var references: java.util.Collection[ReferencesRelation] = _
 
-  def workWith(person: Author, in: String, out: String): ReferencesRelation = {
+  def references(person: Author, in: String, out: String): ReferencesRelation = {
     if (references == null) {
       references = new java.util.HashSet[ReferencesRelation]()
     }

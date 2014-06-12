@@ -65,7 +65,7 @@ class ApplicationScala extends Neo4jConfiguration with CommandLineRunner with Cu
             save(List(referee))
           }
           trans {
-            val rel = author.workWith(referee, artname, reflist.getTitle)
+            val rel = author.references(referee, artname, reflist.getTitle)
             template.save(rel)
           }
         }
